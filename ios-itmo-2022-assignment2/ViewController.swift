@@ -22,6 +22,17 @@ class ViewController: UIViewController {
     
     private lazy var datePicker: UIDatePicker = UIDatePicker()
     
+    private lazy var randomButton:UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Рандомные значения", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(red: 93/255, green: 176/255, blue: 117/255, alpha: 1)
+        button.layer.cornerRadius = 25.5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(randomData), for: .touchDown)
+        return button
+    }()
+    
     private lazy var save: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Сохранить", for: .normal)
@@ -43,14 +54,14 @@ class ViewController: UIViewController {
         view.addSubview(year)
         view.addSubview(assessment)
         view.addSubview(save)
-        //year.textField.inputView = datePicker
-        //datePicker.datePickerMode = .date
+        view.addSubview(randomButton)
         assessment.translatesAutoresizingMaskIntoConstraints = false
         
         name.addTarget(self, action: #selector(containerDidChange), for: .editingChanged)
         director.addTarget(self, action: #selector(containerDidChange), for: .editingChanged)
         year.addTarget(self, action: #selector(containerDidChange), for: .editingChanged)
         assessment.addTarget(self, action: #selector(containerDidChange), for: .editingChanged)
+        
 
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
@@ -77,7 +88,13 @@ class ViewController: UIViewController {
             save.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             save.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             save.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            save.heightAnchor.constraint(equalToConstant: 51)
+            save.heightAnchor.constraint(equalToConstant: 51),
+            
+            randomButton.bottomAnchor.constraint(equalTo: save.topAnchor, constant: -32),
+            randomButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            randomButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            randomButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            randomButton.heightAnchor.constraint(equalToConstant: 51)
         ])
     }
     
@@ -90,5 +107,20 @@ class ViewController: UIViewController {
             save.isEnabled = false
             save.layer.opacity = 0.4
         }
+    }
+    
+    @objc
+    private func randomData() {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        name.textField.text = String((0..<Int.random(in: 1...50)).map{ _ in letters.randomElement()! })
+        director.textField.text = String((0..<Int.random(in: 1...100)).map{ _ in letters.randomElement()! })
+        year.textField.text = String((0..<Int.random(in: 1...100)).map{ _ in letters.randomElement()! })
+        let number = Int.random(in: 0...4)
+        name.isSelected = true
+        year.isSelected = true
+        director.isSelected = true
+        assessment.isSelected = true
+        assessment.stars[number].sendActions(for: .touchDown)
+        
     }
 }

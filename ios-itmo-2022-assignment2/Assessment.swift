@@ -4,7 +4,7 @@ import UIKit
 
 class Assessment: UIControl {
     
-    private lazy var stars: [UIButton] = {
+    lazy var stars: [UIButton] = {
         var stars: [UIButton] = []
         for i in 0..<5 {
             stars.append(UIButton())
